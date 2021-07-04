@@ -1,0 +1,16 @@
+C:\Users\natha\Documents\TextBasedRPG\obj\Debug\net5.0\TextBasedRPG.csproj.AssemblyReference.cache
+C:\Users\natha\Documents\TextBasedRPG\obj\Debug\net5.0\TextBasedRPG.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\natha\Documents\TextBasedRPG\obj\Debug\net5.0\TextBasedRPG.AssemblyInfoInputs.cache
+C:\Users\natha\Documents\TextBasedRPG\obj\Debug\net5.0\TextBasedRPG.AssemblyInfo.cs
+C:\Users\natha\Documents\TextBasedRPG\obj\Debug\net5.0\TextBasedRPG.csproj.CoreCompileInputs.cache
+C:\Users\natha\Documents\TextBasedRPG\bin\Debug\net5.0\TextBasedRPG.exe
+C:\Users\natha\Documents\TextBasedRPG\bin\Debug\net5.0\TextBasedRPG.deps.json
+C:\Users\natha\Documents\TextBasedRPG\bin\Debug\net5.0\TextBasedRPG.runtimeconfig.json
+C:\Users\natha\Documents\TextBasedRPG\bin\Debug\net5.0\TextBasedRPG.runtimeconfig.dev.json
+C:\Users\natha\Documents\TextBasedRPG\bin\Debug\net5.0\TextBasedRPG.dll
+C:\Users\natha\Documents\TextBasedRPG\bin\Debug\net5.0\ref\TextBasedRPG.dll
+C:\Users\natha\Documents\TextBasedRPG\bin\Debug\net5.0\TextBasedRPG.pdb
+C:\Users\natha\Documents\TextBasedRPG\obj\Debug\net5.0\TextBasedRPG.dll
+C:\Users\natha\Documents\TextBasedRPG\obj\Debug\net5.0\ref\TextBasedRPG.dll
+C:\Users\natha\Documents\TextBasedRPG\obj\Debug\net5.0\TextBasedRPG.pdb
+C:\Users\natha\Documents\TextBasedRPG\obj\Debug\net5.0\TextBasedRPG.genruntimeconfig.cache
