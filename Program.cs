@@ -122,6 +122,64 @@ namespace TextBasedRPG
         }
     }
 
+    class Ranger {
+        
+        public float raXP;
+        public float Dexterity;
+        public string rangerName;
+        public string rngWeaponNameRanger;
+        public string[] weapNamesRanger = {
+            "The Butter Knife",
+            "Vampire Stake",
+            "Duel Iron Daggers",
+            "Hardened Staff",
+            "Unbalanced Kunai",
+            "Farmers Sickle",
+            "Copper Short Sword",
+            "Weathered Dagger",
+            "Carving Knife",
+            "Brass Knuckles"};
+
+        public Ranger(string name, int randomNumber) {
+
+            Dexterity = 10.0f;
+            raXP = 0f;
+            rangerName = name;
+            
+            rngWeaponNameRanger = weapNamesRanger[randomNumber];
+
+        }
+    }
+
+    class Duelist {
+        
+        public float dXP;
+        public float Strength;
+        public string duelName;
+        public string rngWeaponNameDuel;
+        public string[] weapNamesDuel = {
+            "The Butter Knife",
+            "Vampire Stake",
+            "Duel Iron Daggers",
+            "Hardened Staff",
+            "Unbalanced Kunai",
+            "Farmers Sickle",
+            "Copper Short Sword",
+            "Weathered Dagger",
+            "Carving Knife",
+            "Brass Knuckles"};
+
+        public Duelist(string name, int randomNumber) {
+
+            Strength = 10.0f;
+            dXP = 0f;
+            duelName = name;
+            
+            rngWeaponNameDuel = weapNamesDuel[randomNumber];
+
+        }
+    }
+
 
     class Program
     {
