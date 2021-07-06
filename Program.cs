@@ -75,9 +75,8 @@ namespace TextBasedRPG
             "Wand of Flames",
             "Wand of Air",
             "Rudamentary Staff",
-            "Kiekurakeppi",
-            "Programmer's Blessing",
-            "Boolin Boolean",
+            "Kiekurakeppi", // special item
+            "Programmer's Blessing", // special item (tooltip: "a tome of ancient knowledge w the words ethched into the cover: 'Lunnaya Vspyshka'... Wonder what that could mean.")
             "Magic Eight Ball",
             "Rune of Kanai",
             "Enchanted Icicle"};
@@ -105,7 +104,7 @@ namespace TextBasedRPG
             "Duel Iron Daggers",
             "Hardened Staff",
             "Unbalanced Kunai",
-            "Farmers Sickle",
+            "Farmers Sickle", // special item (tooltip: "all you need now is a hammer!")
             "Copper Short Sword",
             "Weathered Dagger",
             "Carving Knife",
@@ -129,16 +128,16 @@ namespace TextBasedRPG
         public string rangerName;
         public string rngWeaponNameRanger;
         public string[] weapNamesRanger = {
-            "The Butter Knife",
-            "Vampire Stake",
-            "Duel Iron Daggers",
-            "Hardened Staff",
-            "Unbalanced Kunai",
-            "Farmers Sickle",
-            "Copper Short Sword",
-            "Weathered Dagger",
-            "Carving Knife",
-            "Brass Knuckles"};
+            "Bent Shortbow",
+            "Makeshift Hunting Bow",
+            "Rusty Revolver",
+            "Damaged Crossbow",
+            "Basic Blowpipe",
+            "Childhood Slingshot",
+            "Town Guard Longbow",
+            "Enchanted Throwing Dagger", // special item
+            "Roman Candle",
+            "Family Heirloom Longbow"}; // special item
 
         public Ranger(string name, int randomNumber) {
 
@@ -158,16 +157,16 @@ namespace TextBasedRPG
         public string duelName;
         public string rngWeaponNameDuel;
         public string[] weapNamesDuel = {
-            "The Butter Knife",
-            "Vampire Stake",
-            "Duel Iron Daggers",
-            "Hardened Staff",
-            "Unbalanced Kunai",
-            "Farmers Sickle",
-            "Copper Short Sword",
-            "Weathered Dagger",
-            "Carving Knife",
-            "Brass Knuckles"};
+            "Militia Short Sword",
+            "Crude Mace",
+            "Trusty Spear",
+            "Guard's Longsword",
+            "Firewood Axe",
+            "Rusty Two Handed Scythe",
+            "Father's Gift", //special item
+            "Crude Blacksmith's Hammer",
+            "Goblin Curveblade",
+            "Orc Ripper"}; // special item
 
         public Duelist(string name, int randomNumber) {
 
