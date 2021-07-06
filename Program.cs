@@ -28,33 +28,44 @@ namespace TextBasedRPG
             classIn = Console.ReadLine();
             userClass = classIn.ToLower();
 
+            int randomNum = numGenerator(); // call rng num method
 
             switch (userClass) {
                 case "mage":
-                    
-                    int randomNum = numGenerator(); // call rng num method
-                    Mage mage01 = new Mage(charName, randomNum); // call new mage constructor
+                    Mage playerMage = new Mage(charName, randomNum); // call new mage constructor
                     
                     // print a line to the user describing the new Mage they have just created.
-                    Console.WriteLine($"{mage01.mageName}, your new Mage, has just been created.\nThey have {mage01.Mana} mana points, and are using {mage01.rngWeaponNameMage} as their weapon of choice.");
+                    Console.WriteLine($"{playerMage.mageName}, your new Mage, has just been created.\nThey have {playerMage.Mana} mana points, and are using {playerMage.rngWeaponNameMage} as their weapon of choice.");
                     
                     //write to file to save this data for use in the rest of the game.
 
                     break;
                 case "rogue":
-                    // call new random rogue weapon assign
-                    //call new Rogue(); function w given name from charName
-                    Console.WriteLine($"{charName}, your new Rogue, has just been created.");
+                    Rogue playerRogue = new Rogue(charName, randomNum); // call new mage constructor
+                    
+                    // print a line to the user describing the new Mage they have just created.
+                    Console.WriteLine($"{playerRogue.rogueName}, your new Rogue, has just been created.\nThey have {playerRogue.Stealth} stealth points, and are using {playerRogue.rngWeaponNameRogue} as their weapon of choice.");
+                    
+                    //write to file to save this data for use in the rest of the game.
+
                     break;
                 case "duelist":
-                    // call new random duelist weapon assign
-                    //call new Duelist(); function w given name from charName
-                    Console.WriteLine($"{charName}, your new Duelist, has just been created.");
+                    Duelist playerDuel = new Duelist(charName, randomNum); // call new mage constructor
+                    
+                    // print a line to the user describing the new Mage they have just created.
+                    Console.WriteLine($"{playerDuel.duelName}, your new Duelist, has just been created.\nThey have {playerDuel.Strength} strength points, and are using {playerDuel.rngWeaponNameDuel} as their weapon of choice.");
+                    
+                    //write to file to save this data for use in the rest of the game.
+
                     break;
                 case "ranger":
-                    // call new random ranger weapon assign
-                    //call new Ranger(); function w given name from charName
-                    Console.WriteLine($"{charName}, your new Ranger, has just been created.");
+                    Ranger playerRanger = new Ranger(charName, randomNum); // call new mage constructor
+                    
+                    // print a line to the user describing the new Mage they have just created.
+                    Console.WriteLine($"{playerRanger.rangerName}, your new Ranger, has just been created.\nThey have {playerRanger.Dexterity} dexterity points, and are using {playerRanger.rngWeaponNameRanger} as their weapon of choice.");
+                    
+                    //write to file to save this data for use in the rest of the game.
+
                     break;
                 default:
                     Console.WriteLine("That is not a valid class for your character, try again.");
@@ -76,7 +87,7 @@ namespace TextBasedRPG
             "Wand of Air",
             "Rudamentary Staff",
             "Kiekurakeppi", // special item
-            "Programmer's Blessing", // special item (tooltip: "a tome of ancient knowledge w the words ethched into the cover: 'Lunnaya Vspyshka'... Wonder what that could mean.")
+            "Programmer's Blessing", // special item (tooltip: "a tome of ancient knowledge with the words 'Lunnaya Vspyshka' ethched into the cover... Wonder what that could mean.")
             "Magic Eight Ball",
             "Rune of Kanai",
             "Enchanted Icicle"};
