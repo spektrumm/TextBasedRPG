@@ -70,7 +70,17 @@ namespace TextBasedRPG
         public float Mana;
         public string mageName;
         public string rngWeaponNameMage;
-        public string[] weapNamesMage = {"The Spark Stick", "Hand Warmer", "Spark Wand", "Amethyst Staff", "Kiekurakeppi", "Java Hell", "Boolin Boolean", "Eight", "Maximum Effort", "Cool Beans"};
+        public string[] weapNamesMage = {
+            "Lightning in a Bottle",
+            "Wand of Flames",
+            "Wand of Air",
+            "Rudamentary Staff",
+            "Kiekurakeppi",
+            "Programmer's Blessing",
+            "Boolin Boolean",
+            "Magic Eight Ball",
+            "Rune of Kanai",
+            "Enchanted Icicle"};
 
         public Mage(string name, int randomNumber) {
 
@@ -82,6 +92,36 @@ namespace TextBasedRPG
 
         }
     }
+
+    class Rogue {
+        
+        public float roXP;
+        public float Stealth;
+        public string rogueName;
+        public string rngWeaponNameRogue;
+        public string[] weapNamesRogue = {
+            "The Butter Knife",
+            "Vampire Stake",
+            "Duel Iron Daggers",
+            "Hardened Staff",
+            "Unbalanced Kunai",
+            "Farmers Sickle",
+            "Copper Short Sword",
+            "Weathered Dagger",
+            "Carving Knife",
+            "Brass Knuckles"};
+
+        public Rogue(string name, int randomNumber) {
+
+            Stealth = 10.0f;
+            roXP = 0f;
+            rogueName = name;
+            
+            rngWeaponNameRogue = weapNamesRogue[randomNumber];
+
+        }
+    }
+
 
     class Program
     {
