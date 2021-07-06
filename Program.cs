@@ -195,25 +195,55 @@ namespace TextBasedRPG
     {
         static void Main(string[] args)
         {
-            
+            // --- MAIN MENU --- //
             string MenuTitle = "Main Menu";
-
             titleUpdate(MenuTitle);
+            menuSelect();
 
-            charClass userCharacter = new charClass();
-            string cCreateTitle = "Character Creation";
-            titleUpdate(cCreateTitle);
-            userCharacter.selectClass();
-
-            // open file and set variables for the users character stats here.
-            string gameBeginTitle = "Awakening";
-            titleUpdate(gameBeginTitle);
-        
+            // --- EXITING GAME --- //
+            Console.WriteLine("Press any key to close the game.");
             Console.ReadKey();
         }
         static void titleUpdate(string newTitlePiece) {
                 
                 Console.Title = $"Placeholder - {newTitlePiece}";
             }
+        static void menuSelect() {
+            Console.WriteLine("Welcome to placeholder.\n\nNew Adventure\nLoad Adventure\nCredits");
+        
+            string userChoice = Console.ReadLine().ToLower();
+
+            switch (userChoice) {
+                case "new adventure":
+                    charClass userCharacter = new charClass();
+                    string cCreateTitle = "Character Creation";
+                    titleUpdate(cCreateTitle);
+                    userCharacter.selectClass();
+
+                    // open file and set variables for the users character stats here.  ******** PLACEHOLDER CODE UNTIL AWAKENING SCENE IS DEFINED **********
+                    string gameBeginTitle = "Awakening";
+                    titleUpdate(gameBeginTitle);
+
+                    break;
+                case "load adventure":
+
+                    // print save file directory filenames and have user select a save file
+
+                    //switch statement to call different scenes in the game based off of a readline string var from save file.
+
+                    break;
+                case "credits":
+                    
+                    Console.WriteLine("Placeholder, devloped by Nate 'spekky' Hare.\nWritten in C# as a personal project to help learn the language.\nView the source code at 'github.com/spektrumm'.\n");
+                    menuSelect();
+                    break;
+                default:
+                    
+                    Console.WriteLine("Invalid Menu Selection, try again.");
+                    menuSelect();
+
+                    break;
+            }
+        }
     }
 }
