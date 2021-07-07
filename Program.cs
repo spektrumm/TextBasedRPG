@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.IO;
 using System.Collections;
 using Microsoft.Win32;
+using System.Text.Json.Serialization;
 
 namespace TextBasedRPG
 {
@@ -13,6 +14,7 @@ namespace TextBasedRPG
         public string currentScene { get; set; }
         public string weaponName { get; set; }
         public float resourceAmt { get; set; }
+        public string playerClass { get; set; }
 
         /*
         // Environment variable names for default, process, user, and machine targets.
@@ -49,30 +51,33 @@ namespace TextBasedRPG
 
 
         
-        public saveGame(string name, float xp, float resource, string weapon, string scene) {
+        public saveGame(string name, float xp, float resource, string weapon, string scene, string _class) {
 
             playerName = name;
             playerExp = xp;
             resourceAmt = resource;
             weaponName = weapon;
             currentScene = scene;
+            playerClass = _class;
         }
         
 
-        public static void writeJson(string name, float xp, float resource, string weapon, string scene) {
+        public static void writeJson(string name, float xp, float resource, string weapon, string scene, string _class) {
             
-            var saveFile = new saveGame(name, xp, resource, weapon, scene) {
+            var saveFile = new saveGame(name, xp, resource, weapon, scene, _class) {
 
                 playerName = name,
                 playerExp = xp,
                 resourceAmt = resource,
                 weaponName = weapon,
-                currentScene = scene
+                currentScene = scene,
+                playerClass = _class
 
             };
 
-            string fileName = $"{name}-{scene}-SaveGame.json";
-            string jsonString = JsonSerializer.Serialize(saveFile); // create the json data string
+            string fileName = $"{name}-{scene}-{_class}-SaveGame.json";
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(saveFile, options); // create the json data string
             
             File.WriteAllText(fileName, jsonString); // write the data to a file and name it accordingly
             Console.WriteLine(File.ReadAllText(fileName)); // for debug purposes only
@@ -83,7 +88,154 @@ namespace TextBasedRPG
             System.IO.File.Move(sourceFile, destFile, true);
             
         }
-        
+
+    }
+
+    class LoadGame {
+        public string playerName { get; set; }
+        public float playerExp { get; set; }
+        public string currentScene { get; set; }
+        public string weaponName { get; set; }
+        public float resourceAmt { get; set; }
+        public string playerClass { get; set; }
+
+        public static string mainPath = @"C:\Users\natha\Documents\TextBasedRPG";
+        public static string savesPath = @"C:\Users\natha\Documents\TextBasedRPG\saves";
+
+        public LoadGame(string name, float xp, float resource, string weapon, string scene, string _class) {
+
+            playerName = name;
+            playerExp = xp;
+            resourceAmt = resource;
+            weaponName = weapon;
+            currentScene = scene;
+            playerClass = _class;
+        }
+
+        public static string[] readJson() {
+            
+            
+
+            if (System.IO.Directory.Exists(savesPath)) {
+                
+                /*
+                var saveFile = new loadGame(playerName, playerExp, currentScene, weaponName, resourceAmt,   playerClass) {
+
+                    savedCharName = playerName;
+                    float savedXP = playerExp;
+                    string savedScene = currentScene;
+                    string savedWeapon = weaponName;
+                    float savedResource = resourceAmt;
+                    string savedClass = playerClass;
+
+                };
+                */
+                
+                // need a way to index the strings being printed so only the name of the file is displayed, not the entire path.
+                string[] dirFiles = System.IO.Directory.GetFiles(savesPath);
+                int i = 0;
+                foreach (string s in dirFiles) {
+                    Console.WriteLine($"{i+1}. {dirFiles[i]}");
+                    i++;
+                }
+
+                Console.WriteLine("Enter the number of the save file you'd like to load:\n");
+                
+                // take user input to select the file and index accordingly
+                int saveFileChosen = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine(saveFileChosen);
+                int indexValue = saveFileChosen--;
+                string tempFileName = dirFiles[indexValue]; 
+                string fileName = tempFileName.Remove(0,44); // temporary hard coded file pathname trimming
+                Console.WriteLine(fileName);
+
+                // move the save file to main folder so it can be accessed.
+                string sourceFile = System.IO.Path.Combine(savesPath, fileName);
+                string destFile = System.IO.Path.Combine(mainPath, fileName);
+
+                System.IO.File.Move(sourceFile, destFile, true);
+
+                string jsonString = File.ReadAllText(fileName);
+                LoadGame loadGame = JsonSerializer.Deserialize<LoadGame>(jsonString);
+
+                // C:\Users\natha\Documents\TextBasedRPG\saves
+                    
+                string playerName = loadGame.playerName;
+                float playerExp = loadGame.playerExp;
+                string currentScene = loadGame.currentScene;
+                string weaponName = loadGame.weaponName;
+                float resourceAmt = loadGame.resourceAmt;
+                string playerClass = loadGame.playerClass;
+
+                string[] loadedFile = new string[6];
+                loadedFile[0] = playerName;
+                loadedFile[1] = Convert.ToString(playerExp);
+                loadedFile[2] = currentScene;
+                loadedFile[3] = weaponName;
+                loadedFile[4] = Convert.ToString(resourceAmt);
+                loadedFile[5] = playerClass;
+
+                // move the file back to the saves folder
+                System.IO.File.Move(destFile, sourceFile, true);
+                return loadedFile;
+            }
+            else {
+                Console.WriteLine($"Error, Save folder path: {savesPath} does not exist.");
+                return null;
+            }
+        }
+        /*
+        public class jsonDataConverter : JsonCreationConverter<LoadGame> {
+            protected override LoadGame Create(Type objectType, JObject jObject)
+            {
+                if (FieldExists("playerName", jObject)) {
+                    return new playerName();
+                }
+
+                
+            }
+        }
+
+        public abstract class JsonCreationConverter<T> : JsonConverter
+        {
+        /// <summary>
+        /// Create an instance of objectType, based properties in the JSON object
+        /// </summary>
+        /// <param name="objectType">type of object expected</param>
+        /// <param name="jObject">
+        /// contents of JSON object that will be deserialized
+        /// </param>
+        /// <returns></returns>
+        protected abstract T Create(Type objectType, JObject jObject);
+
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(T).IsAssignableFrom(objectType);
+        }
+
+        public override bool CanWrite
+        {
+            get { return false; }
+        }
+
+        public override object ReadJson(JsonReader reader, 
+                                    Type objectType, 
+                                     object existingValue, 
+                                     JsonSerializer serializer)
+        {
+            // Load JObject from stream
+            JObject jObject = JObject.Load(reader);
+
+            // Create target object based on JObject
+            T target = Create(objectType, jObject);
+
+            // Populate the object properties
+            serializer.Populate(jObject.CreateReader(), target);
+
+            return target;
+        }
+        }
+    */
     }
     
     public class charClass {
@@ -112,7 +264,7 @@ namespace TextBasedRPG
             classIn = Console.ReadLine();
             userClass = classIn.ToLower();
 
-            int randomNum = numGenerator(); // call rng num method
+            int randomNum = numGenerator(); // call rng method
 
             switch (userClass) {
                 case "mage":
@@ -121,9 +273,10 @@ namespace TextBasedRPG
                     // print a line to the user describing the new Mage they have just created.
                     Console.WriteLine($"{playerMage.mageName}, your new Mage, has just been created.\nThey have {playerMage.Mana} mana points, and are using {playerMage.rngWeaponNameMage} as their weapon of choice.");
                     string startingScene = "Awakening";
-                    saveGame initialSave = new saveGame(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene);
+                    string classID = "Mage";
+                    saveGame initialSave = new saveGame(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene, classID);
 
-                    saveGame.writeJson(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene);
+                    saveGame.writeJson(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene, classID);
                     //write to file to save this data for use in the rest of the game.
                     
                     //newSave(playerMage.mageName, playerMage.mXP, playerMage.rngWeaponNameMage, startingScene);
@@ -322,7 +475,9 @@ namespace TextBasedRPG
                 case "load adventure":
 
                     // print save file directory filenames and have user select a save file
+                    string[] loadedFileData = LoadGame.readJson();
 
+                    Console.WriteLine(loadedFileData);
                     //switch statement to call different scenes in the game based off of a readline string var from save file.
 
                     break;
