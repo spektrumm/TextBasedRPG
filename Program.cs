@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text.Json;
 using System.IO;
+using System.Collections;
+using Microsoft.Win32;
 
 namespace TextBasedRPG
 {
@@ -12,8 +14,39 @@ namespace TextBasedRPG
         public string weaponName { get; set; }
         public float resourceAmt { get; set; }
 
+        /*
+        // Environment variable names for default, process, user, and machine targets.
+        string defaultEnvVar = nameof(defaultEnvVar);
+        string processEnvVar = nameof(processEnvVar);
+        string userEnvVar = nameof(userEnvVar);
+        string machineEnvVar = nameof(machineEnvVar);
+
+        string dft = nameof(dft);
+        string process = nameof(process);
+        string user = nameof(user);
+        string machine = nameof(machine);
+
+        // Set the environment variable for each target.
+        // The default target (the current process).
+        Environment.SetEnvironmentVariable(defaultEnvVar, dft);
+        // The current process.
+        Environment.SetEnvironmentVariable(processEnvVar, process,
+                                           EnvironmentVariableTarget.Process);
+        // The current user.
+        Environment.SetEnvironmentVariable(userEnvVar, user,
+                                           EnvironmentVariableTarget.User);
+        // The local machine.
+        Environment.SetEnvironmentVariable(machineEnvVar, machine,
+                                           EnvironmentVariableTarget.Machine);
+
+        // Define an array of environment variables.
+        string[] envVars = { defaultEnvVar,processEnvVar, userEnvVar, machineEnvVar };
+        */
+
         public static string mainPath = @"C:\Users\natha\Documents\TextBasedRPG";
         public static string savesPath = @"C:\Users\natha\Documents\TextBasedRPG\saves";
+
+
 
         
         public saveGame(string name, float xp, float resource, string weapon, string scene) {
