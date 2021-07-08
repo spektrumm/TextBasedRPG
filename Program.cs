@@ -76,8 +76,9 @@ namespace TextBasedRPG
             };
 
             string fileName = $"{name}-{scene}-{_class}-SaveGame.json";
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            string jsonString = JsonSerializer.Serialize(saveFile, options); // create the json data string
+            //var options = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(saveFile); // create the json data string
+            //string jsonString = JsonSerializer.Serialize(saveFile, options); // create the json data string
             
             File.WriteAllText(fileName, jsonString); // write the data to a file and name it accordingly
             Console.WriteLine(File.ReadAllText(fileName)); // for debug purposes only
@@ -92,24 +93,24 @@ namespace TextBasedRPG
     }
 
     class LoadGame {
-        public string playerName { get; set; }
-        public float playerExp { get; set; }
-        public string currentScene { get; set; }
-        public string weaponName { get; set; }
-        public float resourceAmt { get; set; }
-        public string playerClass { get; set; }
+        public string PlayerName { get; set; }
+        public float PlayerExp { get; set; }
+        public string CurrentScene { get; set; }
+        public string WeaponName { get; set; }
+        public float ResourceAmt { get; set; }
+        public string PlayerClass { get; set; }
 
         public static string mainPath = @"C:\Users\natha\Documents\TextBasedRPG";
         public static string savesPath = @"C:\Users\natha\Documents\TextBasedRPG\saves";
 
-        public LoadGame(string name, float xp, float resource, string weapon, string scene, string _class) {
+        public LoadGame(string playerName, float playerExp, float resourceAmt, string weaponName, string currentScene, string playerClass) {
 
-            playerName = name;
-            playerExp = xp;
-            resourceAmt = resource;
-            weaponName = weapon;
-            currentScene = scene;
-            playerClass = _class;
+            PlayerName = playerName;
+            PlayerExp = playerExp;
+            ResourceAmt = resourceAmt;
+            WeaponName = weaponName;
+            CurrentScene = currentScene;
+            PlayerClass = playerClass;
         }
 
         public static string[] readJson() {
@@ -118,18 +119,7 @@ namespace TextBasedRPG
 
             if (System.IO.Directory.Exists(savesPath)) {
                 
-                /*
-                var saveFile = new loadGame(playerName, playerExp, currentScene, weaponName, resourceAmt,   playerClass) {
-
-                    savedCharName = playerName;
-                    float savedXP = playerExp;
-                    string savedScene = currentScene;
-                    string savedWeapon = weaponName;
-                    float savedResource = resourceAmt;
-                    string savedClass = playerClass;
-
-                };
-                */
+                
                 
                 // need a way to index the strings being printed so only the name of the file is displayed, not the entire path.
                 string[] dirFiles = System.IO.Directory.GetFiles(savesPath);
@@ -144,7 +134,7 @@ namespace TextBasedRPG
                 // take user input to select the file and index accordingly
                 int saveFileChosen = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine(saveFileChosen);
-                int indexValue = saveFileChosen--;
+                int indexValue = saveFileChosen - 1;
                 string tempFileName = dirFiles[indexValue]; 
                 string fileName = tempFileName.Remove(0,44); // temporary hard coded file pathname trimming
                 Console.WriteLine(fileName);
@@ -156,16 +146,20 @@ namespace TextBasedRPG
                 System.IO.File.Move(sourceFile, destFile, true);
 
                 string jsonString = File.ReadAllText(fileName);
-                LoadGame loadGame = JsonSerializer.Deserialize<LoadGame>(jsonString);
+                LoadGame loadGame = JsonSerializer.Deserialize<LoadGame>(jsonString); // returns null values if its not the float values, and returns 0 for the floats despite their values, why?
 
                 // C:\Users\natha\Documents\TextBasedRPG\saves
-                    
-                string playerName = loadGame.playerName;
-                float playerExp = loadGame.playerExp;
-                string currentScene = loadGame.currentScene;
-                string weaponName = loadGame.weaponName;
-                float resourceAmt = loadGame.resourceAmt;
-                string playerClass = loadGame.playerClass;
+                
+                
+
+                string playerName = loadGame.PlayerName;
+                float playerExp = loadGame.PlayerExp;
+                string currentScene = loadGame.CurrentScene;
+                string weaponName = loadGame.WeaponName;
+                float resourceAmt = loadGame.ResourceAmt;
+                string playerClass = loadGame.PlayerClass;
+
+                //Console.WriteLine(playerName, playerExp, currentScene, weaponName, resourceAmt, playerClass); for debug
 
                 string[] loadedFile = new string[6];
                 loadedFile[0] = playerName;
@@ -175,6 +169,7 @@ namespace TextBasedRPG
                 loadedFile[4] = Convert.ToString(resourceAmt);
                 loadedFile[5] = playerClass;
 
+                //Console.WriteLine(loadedFile); for debug
                 // move the file back to the saves folder
                 System.IO.File.Move(destFile, sourceFile, true);
                 return loadedFile;
@@ -264,6 +259,8 @@ namespace TextBasedRPG
             classIn = Console.ReadLine();
             userClass = classIn.ToLower();
 
+            string startingScene = "Awakening";
+
             int randomNum = numGenerator(); // call rng method
 
             switch (userClass) {
@@ -272,19 +269,12 @@ namespace TextBasedRPG
                     
                     // print a line to the user describing the new Mage they have just created.
                     Console.WriteLine($"{playerMage.mageName}, your new Mage, has just been created.\nThey have {playerMage.Mana} mana points, and are using {playerMage.rngWeaponNameMage} as their weapon of choice.");
-                    string startingScene = "Awakening";
-                    string classID = "Mage";
-                    saveGame initialSave = new saveGame(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene, classID);
-
-                    saveGame.writeJson(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene, classID);
+                    
                     //write to file to save this data for use in the rest of the game.
-                    
-                    //newSave(playerMage.mageName, playerMage.mXP, playerMage.rngWeaponNameMage, startingScene);
-                    //saveGame file = new saveGame(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene);
-                    
-                    //string jsonString = JsonSerializer.Serialize<saveGame>(saveGame);
+                    string mageClassID = "Mage";
+                    saveGame mageInitialSave = new saveGame(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene, mageClassID);
+                    saveGame.writeJson(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene, mageClassID);
 
-                    //Console.WriteLine(jsonString);
                     break;
                 case "rogue":
                     Rogue playerRogue = new Rogue(charName, randomNum); // call new mage constructor
@@ -293,6 +283,9 @@ namespace TextBasedRPG
                     Console.WriteLine($"{playerRogue.rogueName}, your new Rogue, has just been created.\nThey have {playerRogue.Stealth} stealth points, and are using {playerRogue.rngWeaponNameRogue} as their weapon of choice.");
                     
                     //write to file to save this data for use in the rest of the game.
+                    string roClassID = "Rogue";
+                    saveGame roInitialSave = new saveGame(playerRogue.rogueName, playerRogue.roXP, playerRogue.Stealth, playerRogue.rngWeaponNameRogue, startingScene, roClassID);
+                    saveGame.writeJson(playerRogue.rogueName, playerRogue.roXP, playerRogue.Stealth, playerRogue.rngWeaponNameRogue, startingScene, roClassID);
 
                     break;
                 case "duelist":
@@ -302,6 +295,9 @@ namespace TextBasedRPG
                     Console.WriteLine($"{playerDuel.duelName}, your new Duelist, has just been created.\nThey have {playerDuel.Strength} strength points, and are using {playerDuel.rngWeaponNameDuel} as their weapon of choice.");
                     
                     //write to file to save this data for use in the rest of the game.
+                    string duelClassID = "Duelist";
+                    saveGame rogueInitialSave = new saveGame(playerDuel.duelName, playerDuel.dXP, playerDuel.Strength, playerDuel.rngWeaponNameDuel, startingScene, duelClassID);
+                    saveGame.writeJson(playerDuel.duelName, playerDuel.dXP, playerDuel.Strength, playerDuel.rngWeaponNameDuel, startingScene, duelClassID);
 
                     break;
                 case "ranger":
@@ -311,6 +307,8 @@ namespace TextBasedRPG
                     Console.WriteLine($"{playerRanger.rangerName}, your new Ranger, has just been created.\nThey have {playerRanger.Dexterity} dexterity points, and are using {playerRanger.rngWeaponNameRanger} as their weapon of choice.");
                     
                     //write to file to save this data for use in the rest of the game.
+                    string raClassID = "Ranger";
+                    saveGame rangerInitialSave = new saveGame(playerRanger.rangerName, playerRanger.raXP, playerRanger.Dexterity, playerRanger.rngWeaponNameRanger, startingScene, raClassID);
 
                     break;
                 default:
@@ -467,9 +465,7 @@ namespace TextBasedRPG
                     titleUpdate(cCreateTitle);
                     userCharacter.selectClass();
 
-                    // open file and set variables for the users character stats here.  ******** PLACEHOLDER CODE UNTIL AWAKENING SCENE IS DEFINED **********
-                    string gameBeginTitle = "Awakening";
-                    titleUpdate(gameBeginTitle);
+                    Awakening();
 
                     break;
                 case "load adventure":
@@ -493,6 +489,10 @@ namespace TextBasedRPG
 
                     break;
             }
+        }
+        static void Awakening() {
+            string gameBeginTitle = "Awakening";
+            titleUpdate(gameBeginTitle);
         }
     }
 }
