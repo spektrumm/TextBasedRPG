@@ -1,0 +1,6 @@
+playerName:"test69"
+playerExp:69
+currentScene:"Awakening"
+weaponName:"Basic Wand"
+resourceAmt:88
+playerClass:"Mage"

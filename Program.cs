@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text.Json;
 using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 using System.Collections;
 using Microsoft.Win32;
 using System.Text.Json.Serialization;
@@ -51,7 +53,7 @@ namespace TextBasedRPG
 
 
         
-        public saveGame(string name, float xp, float resource, string weapon, string scene, string _class) {
+        public saveGame(string name, float xp, string scene, string weapon, float resource, string _class) {
 
             playerName = name;
             playerExp = xp;
@@ -62,9 +64,9 @@ namespace TextBasedRPG
         }
         
 
-        public static void writeJson(string name, float xp, float resource, string weapon, string scene, string _class) {
+        public static void writeJson(string name, float xp, string scene, string weapon, float resource, string _class) {
             
-            var saveFile = new saveGame(name, xp, resource, weapon, scene, _class) {
+            var saveFile = new saveGame(name, xp, scene, weapon, resource, _class) {
 
                 playerName = name,
                 playerExp = xp,
@@ -76,9 +78,9 @@ namespace TextBasedRPG
             };
 
             string fileName = $"{name}-{scene}-{_class}-SaveGame.json";
-            //var options = new JsonSerializerOptions { WriteIndented = true };
-            string jsonString = JsonSerializer.Serialize(saveFile); // create the json data string
-            //string jsonString = JsonSerializer.Serialize(saveFile, options); // create the json data string
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            //string jsonString = JsonSerializer.Serialize(saveFile); // create the json data string
+            string jsonString = JsonSerializer.Serialize(saveFile, options); // create the json data string
             
             File.WriteAllText(fileName, jsonString); // write the data to a file and name it accordingly
             Console.WriteLine(File.ReadAllText(fileName)); // for debug purposes only
@@ -91,35 +93,43 @@ namespace TextBasedRPG
         }
 
     }
-
+    public class player {
+        public string playerName { get; set; }
+        public float playerExp { get; set; }
+        public string currentScene { get; set; }
+        public string weaponName { get; set; }
+        public float resourceAmt { get; set; }
+        public string playerClass { get; set; }
+    }
+    public class playerData {
+        public string pName;
+        public float pExp;
+        public string pScene;
+        public string pWeap;
+        public float pRes;
+        public string pClass;
+    }
     class LoadGame {
-        public string PlayerName { get; set; }
-        public float PlayerExp { get; set; }
-        public string CurrentScene { get; set; }
-        public string WeaponName { get; set; }
-        public float ResourceAmt { get; set; }
-        public string PlayerClass { get; set; }
-
+        
+        
         public static string mainPath = @"C:\Users\natha\Documents\TextBasedRPG";
         public static string savesPath = @"C:\Users\natha\Documents\TextBasedRPG\saves";
-
-        public LoadGame(string playerName, float playerExp, float resourceAmt, string weaponName, string currentScene, string playerClass) {
+        /*
+        public LoadGame(string playerName, float playerExp, string currentScene, string weaponName, float resourceAmt, string playerClass) {
 
             PlayerName = playerName;
             PlayerExp = playerExp;
-            ResourceAmt = resourceAmt;
-            WeaponName = weaponName;
             CurrentScene = currentScene;
+            WeaponName = weaponName;
+            ResourceAmt = resourceAmt;
             PlayerClass = playerClass;
         }
-
-        public static string[] readJson() {
+        */
+        public static List<String> readJson() {
             
             
 
             if (System.IO.Directory.Exists(savesPath)) {
-                
-                
                 
                 // need a way to index the strings being printed so only the name of the file is displayed, not the entire path.
                 string[] dirFiles = System.IO.Directory.GetFiles(savesPath);
@@ -137,6 +147,7 @@ namespace TextBasedRPG
                 int indexValue = saveFileChosen - 1;
                 string tempFileName = dirFiles[indexValue]; 
                 string fileName = tempFileName.Remove(0,44); // temporary hard coded file pathname trimming
+                //should try splitting filename on slashes, and then indexing to the last item in the outputted list (ie. the actual filename.json)
                 Console.WriteLine(fileName);
 
                 // move the save file to main folder so it can be accessed.
@@ -144,34 +155,25 @@ namespace TextBasedRPG
                 string destFile = System.IO.Path.Combine(mainPath, fileName);
 
                 System.IO.File.Move(sourceFile, destFile, true);
+               
+                string jsonString = File.ReadAllText(destFile);
+                player playerData = JsonSerializer.Deserialize<player>(jsonString);
 
-                string jsonString = File.ReadAllText(fileName);
-                LoadGame loadGame = JsonSerializer.Deserialize<LoadGame>(jsonString); // returns null values if its not the float values, and returns 0 for the floats despite their values, why?
+                // type conversion for loaded data
+                string expConvert = Convert.ToString(playerData.playerExp);
+                string resConvert = Convert.ToString(playerData.resourceAmt);
 
-                // C:\Users\natha\Documents\TextBasedRPG\saves
-                
-                
+                List<string> loadedFile = new List<string>();
+                loadedFile.Add(playerData.playerName);
+                loadedFile.Add(expConvert);
+                loadedFile.Add(playerData.currentScene);
+                loadedFile.Add(playerData.weaponName);
+                loadedFile.Add(resConvert);
+                loadedFile.Add(playerData.playerClass);
 
-                string playerName = loadGame.PlayerName;
-                float playerExp = loadGame.PlayerExp;
-                string currentScene = loadGame.CurrentScene;
-                string weaponName = loadGame.WeaponName;
-                float resourceAmt = loadGame.ResourceAmt;
-                string playerClass = loadGame.PlayerClass;
-
-                //Console.WriteLine(playerName, playerExp, currentScene, weaponName, resourceAmt, playerClass); for debug
-
-                string[] loadedFile = new string[6];
-                loadedFile[0] = playerName;
-                loadedFile[1] = Convert.ToString(playerExp);
-                loadedFile[2] = currentScene;
-                loadedFile[3] = weaponName;
-                loadedFile[4] = Convert.ToString(resourceAmt);
-                loadedFile[5] = playerClass;
-
-                //Console.WriteLine(loadedFile); for debug
                 // move the file back to the saves folder
                 System.IO.File.Move(destFile, sourceFile, true);
+                
                 return loadedFile;
             }
             else {
@@ -179,58 +181,7 @@ namespace TextBasedRPG
                 return null;
             }
         }
-        /*
-        public class jsonDataConverter : JsonCreationConverter<LoadGame> {
-            protected override LoadGame Create(Type objectType, JObject jObject)
-            {
-                if (FieldExists("playerName", jObject)) {
-                    return new playerName();
-                }
 
-                
-            }
-        }
-
-        public abstract class JsonCreationConverter<T> : JsonConverter
-        {
-        /// <summary>
-        /// Create an instance of objectType, based properties in the JSON object
-        /// </summary>
-        /// <param name="objectType">type of object expected</param>
-        /// <param name="jObject">
-        /// contents of JSON object that will be deserialized
-        /// </param>
-        /// <returns></returns>
-        protected abstract T Create(Type objectType, JObject jObject);
-
-        public override bool CanConvert(Type objectType)
-        {
-            return typeof(T).IsAssignableFrom(objectType);
-        }
-
-        public override bool CanWrite
-        {
-            get { return false; }
-        }
-
-        public override object ReadJson(JsonReader reader, 
-                                    Type objectType, 
-                                     object existingValue, 
-                                     JsonSerializer serializer)
-        {
-            // Load JObject from stream
-            JObject jObject = JObject.Load(reader);
-
-            // Create target object based on JObject
-            T target = Create(objectType, jObject);
-
-            // Populate the object properties
-            serializer.Populate(jObject.CreateReader(), target);
-
-            return target;
-        }
-        }
-    */
     }
     
     public class charClass {
@@ -272,8 +223,8 @@ namespace TextBasedRPG
                     
                     //write to file to save this data for use in the rest of the game.
                     string mageClassID = "Mage";
-                    saveGame mageInitialSave = new saveGame(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene, mageClassID);
-                    saveGame.writeJson(playerMage.mageName, playerMage.mXP, playerMage.Mana, playerMage.rngWeaponNameMage, startingScene, mageClassID);
+                    saveGame mageInitialSave = new saveGame(playerMage.mageName, playerMage.mXP, startingScene, playerMage.rngWeaponNameMage, playerMage.Mana,  mageClassID);
+                    saveGame.writeJson(playerMage.mageName, playerMage.mXP, startingScene, playerMage.rngWeaponNameMage,  playerMage.Mana, mageClassID);
 
                     break;
                 case "rogue":
@@ -284,8 +235,8 @@ namespace TextBasedRPG
                     
                     //write to file to save this data for use in the rest of the game.
                     string roClassID = "Rogue";
-                    saveGame roInitialSave = new saveGame(playerRogue.rogueName, playerRogue.roXP, playerRogue.Stealth, playerRogue.rngWeaponNameRogue, startingScene, roClassID);
-                    saveGame.writeJson(playerRogue.rogueName, playerRogue.roXP, playerRogue.Stealth, playerRogue.rngWeaponNameRogue, startingScene, roClassID);
+                    saveGame roInitialSave = new saveGame(playerRogue.rogueName, playerRogue.roXP, startingScene, playerRogue.rngWeaponNameRogue, playerRogue.Stealth, roClassID);
+                    saveGame.writeJson(playerRogue.rogueName, playerRogue.roXP, startingScene, playerRogue.rngWeaponNameRogue, playerRogue.Stealth, roClassID);
 
                     break;
                 case "duelist":
@@ -296,8 +247,8 @@ namespace TextBasedRPG
                     
                     //write to file to save this data for use in the rest of the game.
                     string duelClassID = "Duelist";
-                    saveGame rogueInitialSave = new saveGame(playerDuel.duelName, playerDuel.dXP, playerDuel.Strength, playerDuel.rngWeaponNameDuel, startingScene, duelClassID);
-                    saveGame.writeJson(playerDuel.duelName, playerDuel.dXP, playerDuel.Strength, playerDuel.rngWeaponNameDuel, startingScene, duelClassID);
+                    saveGame rogueInitialSave = new saveGame(playerDuel.duelName, playerDuel.dXP, startingScene, playerDuel.rngWeaponNameDuel, playerDuel.Strength, duelClassID);
+                    saveGame.writeJson(playerDuel.duelName, playerDuel.dXP, startingScene, playerDuel.rngWeaponNameDuel, playerDuel.Strength, duelClassID);
 
                     break;
                 case "ranger":
@@ -308,7 +259,8 @@ namespace TextBasedRPG
                     
                     //write to file to save this data for use in the rest of the game.
                     string raClassID = "Ranger";
-                    saveGame rangerInitialSave = new saveGame(playerRanger.rangerName, playerRanger.raXP, playerRanger.Dexterity, playerRanger.rngWeaponNameRanger, startingScene, raClassID);
+                    saveGame rangerInitialSave = new saveGame(playerRanger.rangerName, playerRanger.raXP, startingScene, playerRanger.rngWeaponNameRanger, playerRanger.Dexterity, raClassID);
+                    saveGame.writeJson(playerRanger.rangerName, playerRanger.raXP, startingScene, playerRanger.rngWeaponNameRanger, playerRanger.Dexterity, raClassID);
 
                     break;
                 default:
@@ -453,6 +405,33 @@ namespace TextBasedRPG
                 
                 Console.Title = $"Placeholder - {newTitlePiece}";
             }
+        
+        static void menuCall() {
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("MENU\n");
+            Console.ResetColor();
+            Console.WriteLine("1. Save Game\n2. Load Game\n3. Return to menu");
+
+            string menuInput = Console.ReadLine().ToLower();
+
+            switch(menuInput) {
+                case "1":
+                    //saveGame.writeJson();
+                    Console.WriteLine("Save the game WIP");
+                    break;
+                case "2":
+                    //LoadGame.readJson();
+                    Console.WriteLine("Load a save, WIP");
+                    break;
+                case "3":
+                    menuSelect();
+                    break;
+                default:
+                    menuCall();
+                    break;
+            }
+        }
         static void menuSelect() {
             Console.WriteLine("Welcome to placeholder.\n\nNew Adventure\nLoad Adventure\nCredits");
         
@@ -469,30 +448,84 @@ namespace TextBasedRPG
 
                     break;
                 case "load adventure":
+                    string loadedPlayerName;
+                    string tempPlayerExp;
+                    string loadedCurrentScene;
+                    string loadedWeaponName;
+                    string tempResourceAmt;
+                    string loadedPlayerClass;
+
 
                     // print save file directory filenames and have user select a save file
-                    string[] loadedFileData = LoadGame.readJson();
+                    List<string> loadedFileData = LoadGame.readJson();
+                    
+                    // assign predeclared variables to values of the list at given indices
+                    loadedPlayerName = loadedFileData.ElementAt(0);
+                    tempPlayerExp = loadedFileData.ElementAt(1);
+                    loadedCurrentScene = loadedFileData.ElementAt(2);
+                    loadedWeaponName = loadedFileData.ElementAt(3);
+                    tempResourceAmt = loadedFileData.ElementAt(4);
+                    loadedPlayerClass = loadedFileData.ElementAt(5);
 
-                    Console.WriteLine(loadedFileData);
+                    // convert temp variables to type float
+                    float loadedPlayerExp = float.Parse(tempPlayerExp);
+                    float loadedResourceAmt = float.Parse(tempResourceAmt);
+
+                    Console.WriteLine(loadedFileData); //debug
+                    Console.WriteLine($"{loadedPlayerName}{loadedPlayerExp}{loadedCurrentScene}{loadedWeaponName}{loadedResourceAmt}{loadedPlayerClass}"); //debug
                     //switch statement to call different scenes in the game based off of a readline string var from save file.
-
+                    //TODO
                     break;
+                    
                 case "credits":
                     
                     Console.WriteLine("Placeholder, devloped by Nate 'spekky' Hare.\nWritten in C# as a personal project to help learn the language.\nView the source code at 'github.com/spektrumm'.\n");
                     menuSelect();
                     break;
+
                 default:
                     
                     Console.WriteLine("Invalid Menu Selection, try again.");
                     menuSelect();
-
                     break;
+            
             }
         }
         static void Awakening() {
             string gameBeginTitle = "Awakening";
             titleUpdate(gameBeginTitle);
+            Console.WriteLine("You awaken in a tent, in the middle of a forest.\nYou smell the dew in the air, with the faint sound of a cart on a nearby road.\n");
+            Console.WriteLine("What do you choose?\n1. Follow the noise\n2. Make a morning meal\n");
+            string awakeChoice = Console.ReadLine();
+            if (awakeChoice == "1") {
+                Console.WriteLine("You arrive at the road, turn left or right?\n1. Left\n2. Right");
+                string roadChoice = Console.ReadLine();
+                if (roadChoice == "1") {
+                    //starterTown(); //placeholder function to call the next operation
+                    Console.WriteLine("startertown function not written");
+                }else if (awakeChoice == "2") {
+                    //huntingGrounds(); //placeholder function
+                    Console.WriteLine("huntingGrounds function not written");
+                }else {
+                    menuCall(); //placeholder function to call menu
+                }
+            }else if (awakeChoice == "2") {
+                Console.WriteLine("Items consumed.\nYou've made a morning meal: Chicken and Vegetable Skewer.\nIt has been added to your inventory.");
+                // remove food items from inventory, chicken breast, potato, tomato - output vegetable skewer
+                Console.WriteLine("You get up and decide to follow the noise.\nYou come to the road, which direction do you choose?\n 1. Left\n2. Right");
+                string roadChoice = Console.ReadLine();
+                if (roadChoice == "1") {
+                    //starterTown(); //placeholder function to call the next operation
+                    Console.WriteLine("startertown function not written");
+                }else if (awakeChoice == "2") {
+                    //huntingGrounds(); //placeholder function
+                    Console.WriteLine("huntingGrounds function not written");
+                }else {
+                    menuCall(); //placeholder function to call menu
+                }
+            }else {
+                menuCall();
+            }
         }
     }
 }
