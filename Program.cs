@@ -3,9 +3,7 @@ using System.Text.Json;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections;
-using Microsoft.Win32;
-using System.Text.Json.Serialization;
+
 
 namespace TextBasedRPG
 {
@@ -50,9 +48,6 @@ namespace TextBasedRPG
         public static string mainPath = @"C:\Users\natha\Documents\TextBasedRPG";
         public static string savesPath = @"C:\Users\natha\Documents\TextBasedRPG\saves";
 
-
-
-        
         public saveGame(string name, float xp, string scene, string weapon, float resource, string _class) {
 
             playerName = name;
@@ -93,42 +88,12 @@ namespace TextBasedRPG
         }
 
     }
-    public class player {
-        public string playerName { get; set; }
-        public float playerExp { get; set; }
-        public string currentScene { get; set; }
-        public string weaponName { get; set; }
-        public float resourceAmt { get; set; }
-        public string playerClass { get; set; }
-    }
-    public class playerData {
-        public string pName;
-        public float pExp;
-        public string pScene;
-        public string pWeap;
-        public float pRes;
-        public string pClass;
-    }
     class LoadGame {
-        
         
         public static string mainPath = @"C:\Users\natha\Documents\TextBasedRPG";
         public static string savesPath = @"C:\Users\natha\Documents\TextBasedRPG\saves";
-        /*
-        public LoadGame(string playerName, float playerExp, string currentScene, string weaponName, float resourceAmt, string playerClass) {
-
-            PlayerName = playerName;
-            PlayerExp = playerExp;
-            CurrentScene = currentScene;
-            WeaponName = weaponName;
-            ResourceAmt = resourceAmt;
-            PlayerClass = playerClass;
-        }
-        */
         public static List<String> readJson() {
             
-            
-
             if (System.IO.Directory.Exists(savesPath)) {
                 
                 // need a way to index the strings being printed so only the name of the file is displayed, not the entire path.
@@ -183,7 +148,14 @@ namespace TextBasedRPG
         }
 
     }
-    
+    public class player {
+        public string playerName { get; set; }
+        public float playerExp { get; set; }
+        public string currentScene { get; set; }
+        public string weaponName { get; set; }
+        public float resourceAmt { get; set; }
+        public string playerClass { get; set; }
+    }
     public class charClass {
         public string classIn;
         public string userClass;
@@ -270,7 +242,6 @@ namespace TextBasedRPG
             }
         }
     }
-
     public class Mage {
         
         public float mXP;
@@ -299,7 +270,6 @@ namespace TextBasedRPG
 
         }
     }
-
     public class Rogue {
         
         public float roXP;
@@ -328,7 +298,6 @@ namespace TextBasedRPG
 
         }
     }
-
     public class Ranger {
         
         public float raXP;
@@ -357,7 +326,6 @@ namespace TextBasedRPG
 
         }
     }
-
     public class Duelist {
         
         public float dXP;
@@ -386,7 +354,6 @@ namespace TextBasedRPG
 
         }
     }
-
 
     class Program
     {
