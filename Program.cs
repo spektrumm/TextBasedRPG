@@ -192,7 +192,7 @@ namespace TextBasedRPG
                     
                     // print a line to the user describing the new Mage they have just created.
                     Console.WriteLine($"{playerMage.mageName}, your new Mage, has just been created.\nThey have {playerMage.Mana} mana points, and are using {playerMage.rngWeaponNameMage} as their weapon of choice.");
-                    
+
                     //write to file to save this data for use in the rest of the game.
                     string mageClassID = "Mage";
                     saveGame mageInitialSave = new saveGame(playerMage.mageName, playerMage.mXP, startingScene, playerMage.rngWeaponNameMage, playerMage.Mana,  mageClassID);
@@ -400,12 +400,17 @@ namespace TextBasedRPG
             }
         }
         static void menuSelect() {
-            Console.WriteLine("Welcome to placeholder.\n\nNew Adventure\nLoad Adventure\nCredits");
+            //Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Welcome to placeholder.\n");
+            //Console.ResetColor();
+            SlowType(60);
+            System.Threading.Thread.Sleep(160);
+            TypeWriter("\n1. New Adventure\n2. Load Adventure\n3. Credits\n");
         
             string userChoice = Console.ReadLine().ToLower();
 
             switch (userChoice) {
-                case "new adventure":
+                case "1":
                     charClass userCharacter = new charClass();
                     string cCreateTitle = "Character Creation";
                     titleUpdate(cCreateTitle);
@@ -414,7 +419,7 @@ namespace TextBasedRPG
                     Awakening();
 
                     break;
-                case "load adventure":
+                case "2":
                     string loadedPlayerName;
                     string tempPlayerExp;
                     string loadedCurrentScene;
@@ -438,15 +443,13 @@ namespace TextBasedRPG
                     float loadedPlayerExp = float.Parse(tempPlayerExp);
                     float loadedResourceAmt = float.Parse(tempResourceAmt);
 
-                    Console.WriteLine(loadedFileData); //debug
-                    Console.WriteLine($"{loadedPlayerName}{loadedPlayerExp}{loadedCurrentScene}{loadedWeaponName}{loadedResourceAmt}{loadedPlayerClass}"); //debug
                     //switch statement to call different scenes in the game based off of a readline string var from save file.
                     //TODO
                     break;
                     
-                case "credits":
+                case "3":
                     
-                    Console.WriteLine("Placeholder, devloped by Nate 'spekky' Hare.\nWritten in C# as a personal project to help learn the language.\nView the source code at 'github.com/spektrumm'.\n");
+                    TypeWriter("Placeholder, devloped by Nate 'spekky' Hare.\nWritten in C# as a personal project to help learn the language.\nView the source code at 'github.com/spektrumm'.\n");
                     menuSelect();
                     break;
 
@@ -458,40 +461,88 @@ namespace TextBasedRPG
             
             }
         }
+        static void starterTown() {
+            TypeWriter("You arrive at a town, with various townsfolk bustling about.\n");
+            SlowType(90);
+        }
+        static void TypeWriter(string msg) {
+            for(int count = 0; count < msg.Length; count++) {
+                Console.Write(msg[count]);
+                System.Threading.Thread.Sleep(20);
+            }
+        }
+        static void SlowType(int dTime) {
+            string dots = ". . .\n";
+            for(int count = 0; count < dots.Length; count++) {
+                Console.Write(dots[count]);
+                System.Threading.Thread.Sleep(dTime);
+            }
+        }
         static void Awakening() {
             string gameBeginTitle = "Awakening";
             titleUpdate(gameBeginTitle);
-            Console.WriteLine("You awaken in a tent, in the middle of a forest.\nYou smell the dew in the air, with the faint sound of a cart on a nearby road.\n");
-            Console.WriteLine("What do you choose?\n1. Follow the noise\n2. Make a morning meal\n");
+            TypeWriter("You awaken in a tent, in the middle of a forest.\n");
+            SlowType(60);
+            TypeWriter("You smell the dew in the air, with the faint sound of a cart on a nearby road.\n");
+            SlowType(90);
+            System.Threading.Thread.Sleep(300);
+            TypeWriter("What do you choose?\n1. Follow the noise\n2. Make a morning meal\n");
+            System.Threading.Thread.Sleep(160);
             string awakeChoice = Console.ReadLine();
             if (awakeChoice == "1") {
-                Console.WriteLine("You arrive at the road, turn left or right?\n1. Left\n2. Right");
+                System.Threading.Thread.Sleep(300);
+                TypeWriter("You arrive at the road, turn left or right?\n1. Left\n2. Right\n");
+                System.Threading.Thread.Sleep(160);
                 string roadChoice = Console.ReadLine();
                 if (roadChoice == "1") {
-                    //starterTown(); //placeholder function to call the next operation
-                    Console.WriteLine("startertown function not written");
-                }else if (awakeChoice == "2") {
+                    System.Threading.Thread.Sleep(300);
+                    starterTown(); //placeholder function to call the next operation
+                    //Console.WriteLine("startertown function not written");
+                }else if (roadChoice == "2") {
+                    System.Threading.Thread.Sleep(300);
                     //huntingGrounds(); //placeholder function
                     Console.WriteLine("huntingGrounds function not written");
-                }else {
+                }else if (roadChoice == "menu") {
                     menuCall(); //placeholder function to call menu
+                }else {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid selection...\nPlease try again.");
+                    Console.ResetColor();
+                    Awakening();
                 }
             }else if (awakeChoice == "2") {
-                Console.WriteLine("Items consumed.\nYou've made a morning meal: Chicken and Vegetable Skewer.\nIt has been added to your inventory.");
+                TypeWriter("Items consumed");
+                SlowType(40);
+                TypeWriter("You've made a morning meal: Chicken and Vegetable Skewer.\n");
+                SlowType(60);
+                TypeWriter("It has been added to your inventory");
+                SlowType(40);
                 // remove food items from inventory, chicken breast, potato, tomato - output vegetable skewer
-                Console.WriteLine("You get up and decide to follow the noise.\nYou come to the road, which direction do you choose?\n 1. Left\n2. Right");
+                System.Threading.Thread.Sleep(300);
+                TypeWriter("\nYou get up and decide to follow the noise.\nYou come to the road, which direction do you choose?\n1. Left\n2. Right\n");
+                System.Threading.Thread.Sleep(300);
                 string roadChoice = Console.ReadLine();
                 if (roadChoice == "1") {
-                    //starterTown(); //placeholder function to call the next operation
-                    Console.WriteLine("startertown function not written");
-                }else if (awakeChoice == "2") {
+                    starterTown(); //placeholder function to call the next operation
+                    //Console.WriteLine("startertown function not written");
+                }else if (roadChoice == "2") {
                     //huntingGrounds(); //placeholder function
                     Console.WriteLine("huntingGrounds function not written");
-                }else {
+                }else if (roadChoice == "menu" || roadChoice == "Menu") {
                     menuCall(); //placeholder function to call menu
+                }else {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Invalid selection...\nPlease try again.");
+                    Console.ResetColor();
+                    Awakening();
                 }
-            }else {
+            }else if (awakeChoice == "menu" || awakeChoice == "Menu") {
                 menuCall();
+            }else {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid selection...\nPlease try again.");
+                Console.ResetColor();
+                Awakening();
             }
         }
     }
