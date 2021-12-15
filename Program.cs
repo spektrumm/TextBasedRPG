@@ -7,7 +7,8 @@ using System.Linq;
 
 namespace TextBasedRPG
 {
-    class saveGame {
+    class saveGame
+    {
 
         public string playerName { get; set; }
         public float playerExp { get; set; }
@@ -48,7 +49,8 @@ namespace TextBasedRPG
         public static string mainPath = @"C:\Users\natha\Documents\TextBasedRPG";
         public static string savesPath = @"C:\Users\natha\Documents\TextBasedRPG\saves";
 
-        public saveGame(string name, float xp, string scene, string weapon, float resource, string _class) {
+        public saveGame(string name, float xp, string scene, string weapon, float resource, string _class)
+        {
 
             playerName = name;
             playerExp = xp;
@@ -57,11 +59,13 @@ namespace TextBasedRPG
             currentScene = scene;
             playerClass = _class;
         }
-        
 
-        public static void writeJson(string name, float xp, string scene, string weapon, float resource, string _class) {
-            
-            var saveFile = new saveGame(name, xp, scene, weapon, resource, _class) {
+
+        public static void writeJson(string name, float xp, string scene, string weapon, float resource, string _class)
+        {
+
+            var saveFile = new saveGame(name, xp, scene, weapon, resource, _class)
+            {
 
                 playerName = name,
                 playerExp = xp,
@@ -76,7 +80,7 @@ namespace TextBasedRPG
             var options = new JsonSerializerOptions { WriteIndented = true };
             //string jsonString = JsonSerializer.Serialize(saveFile); // create the json data string
             string jsonString = JsonSerializer.Serialize(saveFile, options); // create the json data string
-            
+
             File.WriteAllText(fileName, jsonString); // write the data to a file and name it accordingly
             Console.WriteLine(File.ReadAllText(fileName)); // for debug purposes only
 
@@ -84,34 +88,38 @@ namespace TextBasedRPG
             string sourceFile = System.IO.Path.Combine(mainPath, fileName);
             string destFile = System.IO.Path.Combine(savesPath, fileName);
             System.IO.File.Move(sourceFile, destFile, true);
-            
+
         }
 
     }
-    class LoadGame {
-        
+    class LoadGame
+    {
+
         public static string mainPath = @"C:\Users\natha\Documents\TextBasedRPG";
         public static string savesPath = @"C:\Users\natha\Documents\TextBasedRPG\saves";
-        public static List<String> readJson() {
-            
-            if (System.IO.Directory.Exists(savesPath)) {
-                
+        public static List<String> readJson()
+        {
+
+            if (System.IO.Directory.Exists(savesPath))
+            {
+
                 // need a way to index the strings being printed so only the name of the file is displayed, not the entire path.
                 string[] dirFiles = System.IO.Directory.GetFiles(savesPath);
                 int i = 0;
-                foreach (string s in dirFiles) {
-                    Console.WriteLine($"{i+1}. {dirFiles[i]}");
+                foreach (string s in dirFiles)
+                {
+                    Console.WriteLine($"{i + 1}. {dirFiles[i]}");
                     i++;
                 }
 
                 Console.WriteLine("Enter the number of the save file you'd like to load:\n");
-                
+
                 // take user input to select the file and index accordingly
                 int saveFileChosen = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine(saveFileChosen);
                 int indexValue = saveFileChosen - 1;
-                string tempFileName = dirFiles[indexValue]; 
-                string fileName = tempFileName.Remove(0,44); // temporary hard coded file pathname trimming
+                string tempFileName = dirFiles[indexValue];
+                string fileName = tempFileName.Remove(0, 44); // temporary hard coded file pathname trimming
                 //should try splitting filename on slashes, and then indexing to the last item in the outputted list (ie. the actual filename.json)
                 Console.WriteLine(fileName);
 
@@ -120,7 +128,7 @@ namespace TextBasedRPG
                 string destFile = System.IO.Path.Combine(mainPath, fileName);
 
                 System.IO.File.Move(sourceFile, destFile, true);
-               
+
                 string jsonString = File.ReadAllText(destFile);
                 player playerData = JsonSerializer.Deserialize<player>(jsonString);
 
@@ -138,17 +146,19 @@ namespace TextBasedRPG
 
                 // move the file back to the saves folder
                 System.IO.File.Move(destFile, sourceFile, true);
-                
+
                 return loadedFile;
             }
-            else {
+            else
+            {
                 Console.WriteLine($"Error, Save folder path: {savesPath} does not exist.");
                 return null;
             }
         }
 
     }
-    public class player {
+    public class player
+    {
         public string playerName { get; set; }
         public float playerExp { get; set; }
         public string currentScene { get; set; }
@@ -156,22 +166,25 @@ namespace TextBasedRPG
         public float resourceAmt { get; set; }
         public string playerClass { get; set; }
     }
-    public class charClass {
+    public class charClass
+    {
         public string classIn;
         public string userClass;
         //public string[] weapName = {""};
-        public int numGenerator() {
+        public int numGenerator()
+        {
 
             // random number generator
             int numSelect = 0;
             Random ranNum = new Random();
-            numSelect = ranNum.Next(1,10);
+            numSelect = ranNum.Next(1, 10);
 
             return numSelect;
 
-            
+
         }
-        public void selectClass() {
+        public void selectClass()
+        {
 
             // get character name
             Console.WriteLine("Enter your character's name:");
@@ -186,25 +199,26 @@ namespace TextBasedRPG
 
             int randomNum = numGenerator(); // call rng method
 
-            switch (userClass) {
+            switch (userClass)
+            {
                 case "mage":
                     Mage playerMage = new Mage(charName, randomNum); // call new mage constructor
-                    
+
                     // print a line to the user describing the new Mage they have just created.
                     Console.WriteLine($"{playerMage.mageName}, your new Mage, has just been created.\nThey have {playerMage.Mana} mana points, and are using {playerMage.rngWeaponNameMage} as their weapon of choice.");
 
                     //write to file to save this data for use in the rest of the game.
                     string mageClassID = "Mage";
-                    saveGame mageInitialSave = new saveGame(playerMage.mageName, playerMage.mXP, startingScene, playerMage.rngWeaponNameMage, playerMage.Mana,  mageClassID);
-                    saveGame.writeJson(playerMage.mageName, playerMage.mXP, startingScene, playerMage.rngWeaponNameMage,  playerMage.Mana, mageClassID);
+                    saveGame mageInitialSave = new saveGame(playerMage.mageName, playerMage.mXP, startingScene, playerMage.rngWeaponNameMage, playerMage.Mana, mageClassID);
+                    saveGame.writeJson(playerMage.mageName, playerMage.mXP, startingScene, playerMage.rngWeaponNameMage, playerMage.Mana, mageClassID);
 
                     break;
                 case "rogue":
                     Rogue playerRogue = new Rogue(charName, randomNum); // call new mage constructor
-                    
+
                     // print a line to the user describing the new Mage they have just created.
                     Console.WriteLine($"{playerRogue.rogueName}, your new Rogue, has just been created.\nThey have {playerRogue.Stealth} stealth points, and are using {playerRogue.rngWeaponNameRogue} as their weapon of choice.");
-                    
+
                     //write to file to save this data for use in the rest of the game.
                     string roClassID = "Rogue";
                     saveGame roInitialSave = new saveGame(playerRogue.rogueName, playerRogue.roXP, startingScene, playerRogue.rngWeaponNameRogue, playerRogue.Stealth, roClassID);
@@ -213,10 +227,10 @@ namespace TextBasedRPG
                     break;
                 case "duelist":
                     Duelist playerDuel = new Duelist(charName, randomNum); // call new mage constructor
-                    
+
                     // print a line to the user describing the new Mage they have just created.
                     Console.WriteLine($"{playerDuel.duelName}, your new Duelist, has just been created.\nThey have {playerDuel.Strength} strength points, and are using {playerDuel.rngWeaponNameDuel} as their weapon of choice.");
-                    
+
                     //write to file to save this data for use in the rest of the game.
                     string duelClassID = "Duelist";
                     saveGame rogueInitialSave = new saveGame(playerDuel.duelName, playerDuel.dXP, startingScene, playerDuel.rngWeaponNameDuel, playerDuel.Strength, duelClassID);
@@ -225,10 +239,10 @@ namespace TextBasedRPG
                     break;
                 case "ranger":
                     Ranger playerRanger = new Ranger(charName, randomNum); // call new mage constructor
-                    
+
                     // print a line to the user describing the new Mage they have just created.
                     Console.WriteLine($"{playerRanger.rangerName}, your new Ranger, has just been created.\nThey have {playerRanger.Dexterity} dexterity points, and are using {playerRanger.rngWeaponNameRanger} as their weapon of choice.");
-                    
+
                     //write to file to save this data for use in the rest of the game.
                     string raClassID = "Ranger";
                     saveGame rangerInitialSave = new saveGame(playerRanger.rangerName, playerRanger.raXP, startingScene, playerRanger.rngWeaponNameRanger, playerRanger.Dexterity, raClassID);
@@ -242,8 +256,9 @@ namespace TextBasedRPG
             }
         }
     }
-    public class Mage {
-        
+    public class Mage
+    {
+
         public float mXP;
         public float Mana;
         public string mageName;
@@ -260,18 +275,20 @@ namespace TextBasedRPG
             "Enchanted Icicle",
             "Basic Wand"};
 
-        public Mage(string name, int randomNumber) {
+        public Mage(string name, int randomNumber)
+        {
 
             Mana = 10.0f;
             mXP = 0f;
             mageName = name;
-            
+
             rngWeaponNameMage = weapNamesMage[randomNumber];
 
         }
     }
-    public class Rogue {
-        
+    public class Rogue
+    {
+
         public float roXP;
         public float Stealth;
         public string rogueName;
@@ -288,18 +305,20 @@ namespace TextBasedRPG
             "Carving Knife",
             "Brass Knuckles"};
 
-        public Rogue(string name, int randomNumber) {
+        public Rogue(string name, int randomNumber)
+        {
 
             Stealth = 10.0f;
             roXP = 0f;
             rogueName = name;
-            
+
             rngWeaponNameRogue = weapNamesRogue[randomNumber];
 
         }
     }
-    public class Ranger {
-        
+    public class Ranger
+    {
+
         public float raXP;
         public float Dexterity;
         public string rangerName;
@@ -316,18 +335,20 @@ namespace TextBasedRPG
             "Roman Candle",
             "Family Heirloom Longbow"}; // special item
 
-        public Ranger(string name, int randomNumber) {
+        public Ranger(string name, int randomNumber)
+        {
 
             Dexterity = 10.0f;
             raXP = 0f;
             rangerName = name;
-            
+
             rngWeaponNameRanger = weapNamesRanger[randomNumber];
 
         }
     }
-    public class Duelist {
-        
+    public class Duelist
+    {
+
         public float dXP;
         public float Strength;
         public string duelName;
@@ -344,12 +365,13 @@ namespace TextBasedRPG
             "Goblin Curveblade",
             "Orc Ripper"}; // special item
 
-        public Duelist(string name, int randomNumber) {
+        public Duelist(string name, int randomNumber)
+        {
 
             Strength = 10.0f;
             dXP = 0f;
             duelName = name;
-            
+
             rngWeaponNameDuel = weapNamesDuel[randomNumber];
 
         }
@@ -368,12 +390,14 @@ namespace TextBasedRPG
             Console.WriteLine("Press any key to close the game.");
             Console.ReadKey();
         }
-        static void titleUpdate(string newTitlePiece) {
-                
-                Console.Title = $"Placeholder - {newTitlePiece}";
-            }
-        
-        static void menuCall() {
+        static void titleUpdate(string newTitlePiece)
+        {
+
+            Console.Title = $"Placeholder - {newTitlePiece}";
+        }
+
+        static void menuCall()
+        {
             Console.BackgroundColor = ConsoleColor.Green;
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("MENU\n");
@@ -382,7 +406,8 @@ namespace TextBasedRPG
 
             string menuInput = Console.ReadLine().ToLower();
 
-            switch(menuInput) {
+            switch (menuInput)
+            {
                 case "1":
                     //saveGame.writeJson();
                     Console.WriteLine("Save the game WIP");
@@ -399,17 +424,19 @@ namespace TextBasedRPG
                     break;
             }
         }
-        static void menuSelect() {
+        static void menuSelect()
+        {
             //Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("Welcome to placeholder.\n");
             //Console.ResetColor();
             SlowType(60);
             System.Threading.Thread.Sleep(160);
             TypeWriter("\n1. New Adventure\n2. Load Adventure\n3. Credits\n");
-        
+
             string userChoice = Console.ReadLine().ToLower();
 
-            switch (userChoice) {
+            switch (userChoice)
+            {
                 case "1":
                     charClass userCharacter = new charClass();
                     string cCreateTitle = "Character Creation";
@@ -430,7 +457,7 @@ namespace TextBasedRPG
 
                     // print save file directory filenames and have user select a save file
                     List<string> loadedFileData = LoadGame.readJson();
-                    
+
                     // assign predeclared variables to values of the list at given indices
                     loadedPlayerName = loadedFileData.ElementAt(0);
                     tempPlayerExp = loadedFileData.ElementAt(1);
@@ -446,39 +473,45 @@ namespace TextBasedRPG
                     //switch statement to call different scenes in the game based off of a readline string var from save file.
                     //TODO
                     break;
-                    
+
                 case "3":
-                    
+
                     TypeWriter("Placeholder, devloped by Nate 'spekky' Hare.\nWritten in C# as a personal project to help learn the language.\nView the source code at 'github.com/spektrumm'.\n");
                     menuSelect();
                     break;
 
                 default:
-                    
+
                     Console.WriteLine("Invalid Menu Selection, try again.");
                     menuSelect();
                     break;
-            
+
             }
         }
-        static void starterTown() {
+        static void starterTown()
+        {
             TypeWriter("You arrive at a town, with various townsfolk bustling about.\n");
             SlowType(90);
         }
-        static void TypeWriter(string msg) {
-            for(int count = 0; count < msg.Length; count++) {
+        static void TypeWriter(string msg)
+        {
+            for (int count = 0; count < msg.Length; count++)
+            {
                 Console.Write(msg[count]);
                 System.Threading.Thread.Sleep(20);
             }
         }
-        static void SlowType(int dTime) {
+        static void SlowType(int dTime)
+        {
             string dots = ". . .\n";
-            for(int count = 0; count < dots.Length; count++) {
+            for (int count = 0; count < dots.Length; count++)
+            {
                 Console.Write(dots[count]);
                 System.Threading.Thread.Sleep(dTime);
             }
         }
-        static void Awakening() {
+        static void Awakening()
+        {
             string gameBeginTitle = "Awakening";
             titleUpdate(gameBeginTitle);
             TypeWriter("You awaken in a tent, in the middle of a forest.\n");
@@ -489,28 +522,38 @@ namespace TextBasedRPG
             TypeWriter("What do you choose?\n1. Follow the noise\n2. Make a morning meal\n");
             System.Threading.Thread.Sleep(160);
             string awakeChoice = Console.ReadLine();
-            if (awakeChoice == "1") {
+            if (awakeChoice == "1")
+            {
                 System.Threading.Thread.Sleep(300);
                 TypeWriter("You arrive at the road, turn left or right?\n1. Left\n2. Right\n");
                 System.Threading.Thread.Sleep(160);
                 string roadChoice = Console.ReadLine();
-                if (roadChoice == "1") {
+                if (roadChoice == "1")
+                {
                     System.Threading.Thread.Sleep(300);
                     starterTown(); //placeholder function to call the next operation
                     //Console.WriteLine("startertown function not written");
-                }else if (roadChoice == "2") {
+                }
+                else if (roadChoice == "2")
+                {
                     System.Threading.Thread.Sleep(300);
                     //huntingGrounds(); //placeholder function
                     Console.WriteLine("huntingGrounds function not written");
-                }else if (roadChoice == "menu") {
+                }
+                else if (roadChoice == "menu")
+                {
                     menuCall(); //placeholder function to call menu
-                }else {
+                }
+                else
+                {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid selection...\nPlease try again.");
                     Console.ResetColor();
                     Awakening();
                 }
-            }else if (awakeChoice == "2") {
+            }
+            else if (awakeChoice == "2")
+            {
                 TypeWriter("Items consumed");
                 SlowType(40);
                 TypeWriter("You've made a morning meal: Chicken and Vegetable Skewer.\n");
@@ -522,23 +565,34 @@ namespace TextBasedRPG
                 TypeWriter("\nYou get up and decide to follow the noise.\nYou come to the road, which direction do you choose?\n1. Left\n2. Right\n");
                 System.Threading.Thread.Sleep(300);
                 string roadChoice = Console.ReadLine();
-                if (roadChoice == "1") {
+                if (roadChoice == "1")
+                {
                     starterTown(); //placeholder function to call the next operation
                     //Console.WriteLine("startertown function not written");
-                }else if (roadChoice == "2") {
+                }
+                else if (roadChoice == "2")
+                {
                     //huntingGrounds(); //placeholder function
                     Console.WriteLine("huntingGrounds function not written");
-                }else if (roadChoice == "menu" || roadChoice == "Menu") {
+                }
+                else if (roadChoice == "menu" || roadChoice == "Menu")
+                {
                     menuCall(); //placeholder function to call menu
-                }else {
+                }
+                else
+                {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid selection...\nPlease try again.");
                     Console.ResetColor();
                     Awakening();
                 }
-            }else if (awakeChoice == "menu" || awakeChoice == "Menu") {
+            }
+            else if (awakeChoice == "menu" || awakeChoice == "Menu")
+            {
                 menuCall();
-            }else {
+            }
+            else
+            {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Invalid selection...\nPlease try again.");
                 Console.ResetColor();
