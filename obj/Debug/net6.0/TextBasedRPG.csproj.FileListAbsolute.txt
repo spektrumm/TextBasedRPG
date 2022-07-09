@@ -1,0 +1,15 @@
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/bin/Debug/net6.0/TextBasedRPG
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/bin/Debug/net6.0/TextBasedRPG.deps.json
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/bin/Debug/net6.0/TextBasedRPG.runtimeconfig.json
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/bin/Debug/net6.0/TextBasedRPG.dll
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/bin/Debug/net6.0/ref/TextBasedRPG.dll
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/bin/Debug/net6.0/TextBasedRPG.pdb
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/obj/Debug/net6.0/TextBasedRPG.csproj.AssemblyReference.cache
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/obj/Debug/net6.0/TextBasedRPG.GeneratedMSBuildEditorConfig.editorconfig
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/obj/Debug/net6.0/TextBasedRPG.AssemblyInfoInputs.cache
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/obj/Debug/net6.0/TextBasedRPG.AssemblyInfo.cs
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/obj/Debug/net6.0/TextBasedRPG.csproj.CoreCompileInputs.cache
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/obj/Debug/net6.0/TextBasedRPG.dll
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/obj/Debug/net6.0/ref/TextBasedRPG.dll
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/obj/Debug/net6.0/TextBasedRPG.pdb
+/Users/nhare/Documents/GitHub/TextBasedRPG/TextBasedRPG/obj/Debug/net6.0/TextBasedRPG.genruntimeconfig.cache
